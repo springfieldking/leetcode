@@ -521,14 +521,24 @@ public class Solution {
     }
 
     public int divide(int dividend, int divisor) {
-        int sign = (dividend > 0 ? 1 : -1) * (divisor > 0 ? 1 : -1);
-        long ldividend = Math.abs((long)dividend);
-        long ldivisor = Math.abs((long)divisor);
-        long d = 0;
-        while ((ldividend -= ldivisor) >= 0) d++;
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+        int sign = dividend > 0 ^ divisor > 0 ? -1 : 1;
+        long dd = Math.abs((long)dividend);
+        long ds = Math.abs((long)divisor);
+        int ans = 0;
+        while(ds <= dd) {
+            long tmp = ds, m = 1;
+            while(tmp<<1 <= dd) {
+                tmp <<= 1;
+                m <<= 1;
+            }
 
-        int di = (int) d;
-        if(di < 0) return Integer.MAX_VALUE;
-        else return di* sign;
+            ans += m;
+            dd -= tmp;
+        }
+
+        return ans * sign;
     }
 }
